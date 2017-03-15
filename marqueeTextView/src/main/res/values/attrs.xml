@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="MarqueeTextView">
+        <attr name="moveSpeed" format="dimension"/>
+        <attr name="remainDuration" format="integer"/>
+        <attr name="refreshInterval" format="integer"/>
+        <attr name="spaceLength" format="integer"/>
+        <attr name="dividerText" format="string"/>
+    </declare-styleable>
+</resources>

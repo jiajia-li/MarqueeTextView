@@ -1,0 +1,72 @@
+apply plugin: 'com.android.library'
+apply plugin: 'maven'
+android {
+    compileSdkVersion 24
+    buildToolsVersion "25.0.0"
+
+    defaultConfig {
+        minSdkVersion 9
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:24.0.0'
+    testCompile 'junit:junit:4.12'
+}
+//要上传的仓库地址
+def MAVEN_LOCAL_RELEASE_PATH = 'http://10.17.174.40:8082/nexus/content/repositories/releases/'
+def MAVEN_LOCAL_SNAP_PATH = 'http://10.17.174.40:8082/nexus/content/repositories/snapshots/'
+
+//artifaceID
+def ARTIFACT_ID = 'marqueeTextView'
+//version
+def VERSION_NAME = '1.1.1-SNAPSHOT'
+//groupID
+def GROUP_ID = 'com.yiniu'
+//仓库的账户
+def USERNAME='admin'
+//对应的密码
+def PASSWORD='yiniu123456'
+
+
+uploadArchives {
+    repositories {
+        def nexus_url
+        println("uploadArchives repositories")
+        if (VERSION_NAME.contains('-SNAPSHOT')){
+            nexus_url = MAVEN_LOCAL_SNAP_PATH
+        }else {
+            nexus_url = MAVEN_LOCAL_RELEASE_PATH
+        }
+        mavenDeployer {
+            repository(url: nexus_url) {
+                authentication(userName: USERNAME, password: PASSWORD)
+            }
+            pom.project{
+                groupId GROUP_ID
+                artifactId ARTIFACT_ID
+                version VERSION_NAME
+                packaging 'aar'
+                description 'lib for onesdk'
+            }
+
+        }
+    }
+}
